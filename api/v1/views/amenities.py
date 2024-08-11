@@ -1,94 +1,93 @@
 #!/usr/bin/python3
-""" objects that handles all default RestFul API actions for Amenities"""
-from models.amenity import Amenity
-from models import storage
-from api.v1.views import app_views
+""" Handles all default RESTful API actions for Product Features """
+from models.product_feature import ProductFeature
+from models import database_storage
+from api.v2.controllers import shop_views
 from flask import abort, jsonify, make_response, request
 from flasgger.utils import swag_from
 
-
-@app_views.route('/amenities', methods=['GET'], strict_slashes=False)
-@swag_from('documentation/amenity/all_amenities.yml')
-def get_amenities():
+@shop_views.route('/features', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/product_feature/all_features.yml')
+def get_features():
     """
-    Retrieves a list of all amenities
+    Retrieves a list of all product features
     """
-    all_amenities = storage.all(Amenity).values()
-    list_amenities = []
-    for amenity in all_amenities:
-        list_amenities.append(amenity.to_dict())
-    return jsonify(list_amenities)
+    all_features = database_storage.all(ProductFeature).values()
+    list_features = []
+    for feature in all_features:
+        list_features.append(feature.to_dict())
+    return jsonify({"status": "success", "features": list_features})
 
 
-@app_views.route('/amenities/<amenity_id>/', methods=['GET'],
-                 strict_slashes=False)
-@swag_from('documentation/amenity/get_amenity.yml', methods=['GET'])
-def get_amenity(amenity_id):
-    """ Retrieves an amenity """
-    amenity = storage.get(Amenity, amenity_id)
-    if not amenity:
-        abort(404)
+@shop_views.route('/features/<feature_id>/', methods=['GET'],
+                  strict_slashes=False)
+@swag_from('documentation/product_feature/get_feature.yml', methods=['GET'])
+def get_feature(feature_id):
+    """ Retrieves a specific product feature """
+    feature = database_storage.get(ProductFeature, feature_id)
+    if not feature:
+        abort(404, description="Feature not found")
 
-    return jsonify(amenity.to_dict())
+    return jsonify({"status": "success", "feature": feature.to_dict()})
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['DELETE'],
-                 strict_slashes=False)
-@swag_from('documentation/amenity/delete_amenity.yml', methods=['DELETE'])
-def delete_amenity(amenity_id):
+@shop_views.route('/features/<feature_id>', methods=['DELETE'],
+                  strict_slashes=False)
+@swag_from('documentation/product_feature/delete_feature.yml', methods=['DELETE'])
+def delete_feature(feature_id):
     """
-    Deletes an amenity  Object
+    Deletes a product feature
     """
 
-    amenity = storage.get(Amenity, amenity_id)
+    feature = database_storage.get(ProductFeature, feature_id)
 
-    if not amenity:
-        abort(404)
+    if not feature:
+        abort(404, description="Feature not found")
 
-    storage.delete(amenity)
-    storage.save()
+    database_storage.delete(feature)
+    database_storage.save()
 
-    return make_response(jsonify({}), 200)
+    return make_response(jsonify({"status": "success", "message": "Feature deleted"}), 200)
 
 
-@app_views.route('/amenities', methods=['POST'], strict_slashes=False)
-@swag_from('documentation/amenity/post_amenity.yml', methods=['POST'])
-def post_amenity():
+@shop_views.route('/features', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/product_feature/post_feature.yml', methods=['POST'])
+def post_feature():
     """
-    Creates an amenity
+    Creates a new product feature
     """
     if not request.get_json():
-        abort(400, description="Not a JSON")
+        abort(400, description="Request payload is not a valid JSON")
 
     if 'name' not in request.get_json():
-        abort(400, description="Missing name")
+        abort(400, description="Feature name is missing")
 
     data = request.get_json()
-    instance = Amenity(**data)
+    instance = ProductFeature(**data)
     instance.save()
-    return make_response(jsonify(instance.to_dict()), 201)
+    return make_response(jsonify({"status": "success", "feature": instance.to_dict()}), 201)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['PUT'],
-                 strict_slashes=False)
-@swag_from('documentation/amenity/put_amenity.yml', methods=['PUT'])
-def put_amenity(amenity_id):
+@shop_views.route('/features/<feature_id>', methods=['PUT'],
+                  strict_slashes=False)
+@swag_from('documentation/product_feature/put_feature.yml', methods=['PUT'])
+def put_feature(feature_id):
     """
-    Updates an amenity
+    Updates a product feature
     """
     if not request.get_json():
-        abort(400, description="Not a JSON")
+        abort(400, description="Request payload is not a valid JSON")
 
     ignore = ['id', 'created_at', 'updated_at']
 
-    amenity = storage.get(Amenity, amenity_id)
+    feature = database_storage.get(ProductFeature, feature_id)
 
-    if not amenity:
-        abort(404)
+    if not feature:
+        abort(404, description="Feature not found")
 
     data = request.get_json()
     for key, value in data.items():
         if key not in ignore:
-            setattr(amenity, key, value)
-    storage.save()
-    return make_response(jsonify(amenity.to_dict()), 200)
+            setattr(feature, key, value)
+    database_storage.save()
+    return make_response(jsonify({"status": "success", "feature": feature.to_dict()}), 200)
