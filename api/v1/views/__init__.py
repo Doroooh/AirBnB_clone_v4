@@ -2,7 +2,7 @@
 """ Blueprint for the E-Commerce API """
 from flask import Blueprint
 
-shop_views = Blueprint('shop_views', __name__, url_prefix='/api/v1')
+app_views = Blueprint('app_views', __name__, url_prefix='/api/v1')
 
 # Importing the various routes for e-commerce platforms
 
