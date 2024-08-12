@@ -2,79 +2,109 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <!-- jQuery library included for DOM manipulation and event handling -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- Custom JavaScript file specific to this page with cache-busting -->
     <script src="../static/scripts/1-hbnb.js?{{ cache_id }}"></script>
+    <!-- Linking various CSS files for styling the page -->
     <link rel="stylesheet" type="text/css" href="../static/styles/4-common.css?{{ cache_id }}">
     <link rel="stylesheet" type="text/css" href="../static/styles/3-header.css?{{ cache_id }}">
     <link rel="stylesheet" type="text/css" href="../static/styles/3-footer.css?{{ cache_id }}">
     <link rel="stylesheet" type="text/css" href="../static/styles/6-filters.css?{{ cache_id }}">
     <link type="text/css" rel="stylesheet" href="../static/styles/8-places.css?{{ cache_id }}">
+    <!-- Favicon for the website -->
     <link rel="icon" href="../static/images/icon.png?{{ cache_id }}" />
+    <!-- Title of the webpage -->
     <title>HBnB</title>
   </head>
   <body>
+    <!-- Header section has a logo included-->
     <header>
       <div class="logo"></div>
     </header>
+
+    <!-- Main -->
     <div class="container">
+      <!-- filter by states and amenities -->
       <section class="filters">
-	<div class="locations">
-	  <h3>States</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for state in states %}
-	      <li>
-		<h2>{{ state[0].name }}:</h2>
-		<ul>
-		  {% for city in state[1] %}
-		  <li>{{ city.name }}</li>
-		  {% endfor %}
-		</ul>
-	      </li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<div class="amenities">
-	  <h3>Amenities</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for amenity in amenities %}
-	      <li><input type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">{{ amenity.name }}</li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<button type="button">Search</button>
+        <!-- select States and Cities -->
+        <div class="locations">
+          <h3>States</h3>
+          <h4>&nbsp;</h4> <!-- Placeholder element for additional text -->
+          <div class="popover">
+            <ul>
+              <!-- Looping through state and displaying name and cities -->
+              {% for state in states %}
+              <li>
+                <h2>{{ state[0].name }}:</h2>
+                <ul>
+                  <!-- Looping through city within selected state -->
+                  {% for city in state[1] %}
+                  <li>{{ city.name }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Allow users to select the desired amenities -->
+        <div class="amenities">
+          <h3>Amenities</h3>
+          <h4>&nbsp;</h4> <!-- Placeholder for additional text -->
+          <div class="popover">
+            <ul>
+              <!-- Looping through amenities and creating their checkboxes -->
+              {% for amenity in amenities %}
+              <li>
+                <input type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">
+                {{ amenity.name }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- the Search button will apply the filters -->
+        <button type="button">Search</button>
       </section>
+
+      <!-- display list of available places -->
       <div class="placesh1"><h1>Places</h1></div>
       <section class="places">
-	<!-- <h1>Places</h1> -->
-	{% for place in places %}
-	<article>
-	  <div class="title_box">
-	    <h2>{{ place.name }}</h2>
-	    <div class="price_by_night">${{ place.price_by_night }}</div>
-	  </div>
-	  <div class="information">
-	    <div class="max_guest">{{ place.max_guest }} Guest{% if place.max_guest != 1 %}s{% endif %}</div>
+        <!-- Looping through the place, display the details -->
+        {% for place in places %}
+        <article>
+          <!-- Title box has place name and prices -->
+          <div class="title_box">
+            <h2>{{ place.name }}</h2>
+            <div class="price_by_night">${{ place.price_by_night }}</div>
+          </div>
+
+          <!-- shows guest capacity, number of rooms, and bathrooms -->
+          <div class="information">
+            <div class="max_guest">{{ place.max_guest }} Guest{% if place.max_guest != 1 %}s{% endif %}</div>
             <div class="number_rooms">{{ place.number_rooms }} Bedroom{% if place.number_rooms != 1 %}s{% endif %}</div>
             <div class="number_bathrooms">{{ place.number_bathrooms }} Bathroom{% if place.number_bathrooms != 1 %}s{% endif %}</div>
-	  </div>
-	  <div class="user">
+          </div>
+
+          <!-- display the name -->
+          <div class="user">
             <b>Owner:</b> {{ place.user.first_name }} {{ place.user.last_name }}
           </div>
+
+          <!-- Describing the place -->
           <div class="description">
-	    {{ place.description | safe }}
+            {{ place.description | safe }}
           </div>
-	</article>
-	{% endfor %}
+        </article>
+        {% endfor %}
       </section>
     </div>
+
+    <!-- Footer -->
     <footer>
-      <p>Holberton School</p>
+      <p>HBNB</p>
     </footer>
   </body>
 </html>
