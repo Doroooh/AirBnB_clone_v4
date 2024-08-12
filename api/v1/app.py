@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Flask Application """
+""" This is the main application entry point to connect to the API """
 from models import storage
 from api.v1.views import app_views
 from os import environ
@@ -8,42 +9,37 @@ from flask_cors import CORS
 from flasgger import Swagger
 from flasgger.utils import swag_from
 
-app = Flask(__name__)
-app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-app.register_blueprint(app_views)
-cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+def create_app():
+    """Creating and configuring Flask application"""
+    app = Flask(__name__)
+    app.register_blueprint(app_views)
 
+    # Enabling Cross-Origin Resource Sharing (CORS)
+    CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
-@app.teardown_appcontext
-def close_db(error):
-    """ Close Storage """
-    storage.close()
+    # Initializing Swagger for API documentation
+    Swagger(app)
 
+    @app.teardown_appcontext
+    def close_storage(exception=None):
+        """Close the storage on teardown"""
+        storage.close()
 
-@app.errorhandler(404)
-def not_found(error):
-    """ 404 Error
-    ---
-    responses:
-      404:
-        description: a resource was not found
-    """
-    return make_response(jsonify({'error': "Not found"}), 404)
+    @app.errorhandler(404)
+    def not_found_handler(error):
+        """Handling errors"""
+        return make_response(jsonify({'error': 'Not found'}), 404)
 
-app.config['SWAGGER'] = {
-    'title': 'AirBnB clone Restful API',
-    'uiversion': 3
-}
+    @app.route('/api/v1/ui')
+    @swag_from('swagger.yml')  # Swagger documentation for this route
+    def api_ui():
+        """Rendering API documentation UI"""
+        return render_template('swaggerui.html')
 
-Swagger(app)
-
+    return app
 
 if __name__ == "__main__":
-    """ Main Function """
-    host = environ.get('HBNB_API_HOST')
-    port = environ.get('HBNB_API_PORT')
-    if not host:
-        host = '0.0.0.0'
-    if not port:
-        port = '5000'
-    app.run(host=host, port=port, threaded=True)
+    app = create_app()
+    host = environ.get('HBNB_API_HOST', '0.0.0.0')
+    port = int(environ.get('HBNB_API_PORT', '5000'))
+    app.run(host=host, port=port)
