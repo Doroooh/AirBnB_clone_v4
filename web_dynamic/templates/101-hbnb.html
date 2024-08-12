@@ -2,60 +2,97 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <!-- jQuery library for easy DOM manipulation and AJAX operations -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- Link main JavaScript file with cache-busting that ensure latest version is used -->
     <script src="../static/scripts/101-hbnb.js?{{ cache_id }}"></script>
+    <!-- Common styles for consistency -->
     <link rel="stylesheet" type="text/css" href="../static/styles/4-common.css?{{ cache_id }}">
+    <!-- the header-specific styling. it helps in branding and navigation -->
     <link rel="stylesheet" type="text/css" href="../static/styles/3-header.css?{{ cache_id }}">
+    <!-- the footer-specific styling maintains uniformity in footer design -->
     <link rel="stylesheet" type="text/css" href="../static/styles/3-footer.css?{{ cache_id }}">
+    <!-- Styles for filters for searching by location or amenities -->
     <link rel="stylesheet" type="text/css" href="../static/styles/6-filters.css?{{ cache_id }}">
+    <!-- Custom styles are specific to places section of the site -->
     <link type="text/css" rel="stylesheet" href="../static/styles/100-places.css?{{ cache_id }}">
+    <!-- Icon is displayed in the browser tab for branding -->
     <link rel="icon" href="../static/images/icon.png?{{ cache_id }}" />
+    <!-- The title HBNB is displayed -->
     <title>HBnB</title>
   </head>
   <body>
+    <!-- header section contains branding and API status -->
     <header>
+      <!-- Logo placeholder -->
       <div class="logo"></div>
-	  <div id="api_status" class="available"></div>
+      <!-- Indicator shows whether API is available or not -->
+      <div id="api_status" class="available"></div>
     </header>
+
+    <!-- Main -->
     <div class="container">
+      <!--  a user narrows down the search -->
       <section class="filters">
-	<div class="locations">
-	  <h3>States</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for state in states %}
-	      <li>
-		  <h2><input class="state-checkbox" type="checkbox" data-id="{{ state[0].id }}" data-name="{{ state[0].name }}">{{ state[0].name }}:</h2>
-		<ul>
-		  {% for city in state[1] %}
-		  <li><input class="city-checkbox" type="checkbox" data-id="{{ city.id }}" data-name="{{ city.name }}">{{ city.name }}</li>
-		  {% endfor %}
-		</ul>
-	      </li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<div class="amenities">
-	  <h3>Amenities</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for amenity in amenities %}
-	      <li><input class="amen-checkbox" type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">{{ amenity.name }}</li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<button type="button">Search</button>
+        <!-- user selects states and respective cities -->
+        <div class="locations">
+          <h3>States</h3>
+          <h4>&nbsp;</h4> <!-- spacer element added for alignment -->
+          <div class="popover">
+            <ul>
+              <!-- Looping to render list items with checkboxes -->
+              {% for state in states %}
+              <li>
+                <h2>
+                  <!-- Checkbox to select a state -->
+                  <input class="state-checkbox" type="checkbox" data-id="{{ state[0].id }}" data-name="{{ state[0].name }}">
+                  {{ state[0].name }}:
+                </h2>
+                <ul>
+                  <!-- Looping through and rendering a checkbox -->
+                  {% for city in state[1] %}
+                  <li>
+                    <input class="city-checkbox" type="checkbox" data-id="{{ city.id }}" data-name="{{ city.name }}">
+                    {{ city.name }}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <!-- user selects various features for the places -->
+        <div class="amenities">
+          <h3>Amenities</h3>
+          <h4>&nbsp;</h4> <!-- spacer for consistent alignment -->
+          <div class="popover">
+            <ul>
+              <!-- Looping and rendering a checkbox -->
+              {% for amenity in amenities %}
+              <li>
+                <input class="amen-checkbox" type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">
+                {{ amenity.name }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- triggers a search -->
+        <button type="button">Search</button>
       </section>
+
+      <!-- display a list of places matching the user's search criteria -->
       <div class="placesh1"><h1>Places</h1></div>
       <section class="places">
+        <!-- Dynamic content for places  -->
       </section>
     </div>
+
+    <!-- Footer -->
     <footer>
-      <p>Holberton School</p>
+      <p>HBNB</p>
     </footer>
   </body>
 </html>
