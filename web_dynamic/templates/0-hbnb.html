@@ -2,77 +2,101 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <!-- Link to external CSS files with cache-busting parameter for version control -->
     <link rel="stylesheet" type="text/css" href="../static/styles/4-common.css?{{ cache_id }}">
     <link rel="stylesheet" type="text/css" href="../static/styles/3-header.css?{{ cache_id }}">
     <link rel="stylesheet" type="text/css" href="../static/styles/3-footer.css?{{ cache_id }}">
     <link rel="stylesheet" type="text/css" href="../static/styles/6-filters.css?{{ cache_id }}">
     <link type="text/css" rel="stylesheet" href="../static/styles/8-places.css?{{ cache_id }}">
+    <!-- Favicon for the website -->
     <link rel="icon" href="../static/images/icon.png?{{ cache_id }}" />
     <title>HBnB</title>
   </head>
   <body>
+    <!-- The Header section, has a logo -->
     <header>
       <div class="logo"></div>
     </header>
+
+    <!-- Main content -->
     <div class="container">
+      <!-- Filter allows a user in selecting States and Amenities -->
       <section class="filters">
-	<div class="locations">
-	  <h3>States</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for state in states %}
-	      <li>
-		<h2>{{ state[0].name }}:</h2>
-		<ul>
-		  {% for city in state[1] %}
-		  <li>{{ city.name }}</li>
-		  {% endfor %}
-		</ul>
-	      </li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<div class="amenities">
-	  <h3>Amenities</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for amenity in amenities %}
-	      <li>{{ amenity.name }}</li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<button type="button">Search</button>
+        <!-- Locations display States and the respective Cities -->
+        <div class="locations">
+          <h3>States</h3>
+          <h4>&nbsp;</h4> <!-- A Placeholder for subheading -->
+          <div class="popover">
+            <ul>
+              <!-- Looping through every state and displaying cities -->
+              {% for state in states %}
+              <li>
+                <h2>{{ state[0].name }}:</h2>
+                <ul>
+                  <!-- Looping through every city in current state -->
+                  {% for city in state[1] %}
+                  <li>{{ city.name }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Amenities displays list of available amenities -->
+        <div class="amenities">
+          <h3>Amenities</h3>
+          <h4>&nbsp;</h4> <!-- Placeholder for subheading -->
+          <div class="popover">
+            <ul>
+              <!-- Looping and displaying every amenity -->
+              {% for amenity in amenities %}
+              <li>{{ amenity.name }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Search button that triggers filters -->
+        <button type="button">Search</button>
       </section>
+
+      <!-- Display list of available places -->
       <div class="placesh1"><h1>Places</h1></div>
       <section class="places">
-	<!-- <h1>Places</h1> -->
-	{% for place in places %}
-	<article>
-	  <div class="title_box">
-	    <h2>{{ place.name }}</h2>
-	    <div class="price_by_night">${{ place.price_by_night }}</div>
-	  </div>
-	  <div class="information">
-	    <div class="max_guest">{{ place.max_guest }} Guest{% if place.max_guest != 1 %}s{% endif %}</div>
+        <!-- Loop and display every place -->
+        {% for place in places %}
+        <article>
+          <!-- Title box has place name and price of accomodation per night -->
+          <div class="title_box">
+            <h2>{{ place.name }}</h2>
+            <div class="price_by_night">${{ place.price_by_night }}</div>
+          </div>
+
+          <!-- Information shows guest capacity, rooms, and bathrooms -->
+          <div class="information">
+            <div class="max_guest">{{ place.max_guest }} Guest{% if place.max_guest != 1 %}s{% endif %}</div>
             <div class="number_rooms">{{ place.number_rooms }} Bedroom{% if place.number_rooms != 1 %}s{% endif %}</div>
             <div class="number_bathrooms">{{ place.number_bathrooms }} Bathroom{% if place.number_bathrooms != 1 %}s{% endif %}</div>
-	  </div>
-	  <div class="user">
+          </div>
+
+          <!-- User displays the user's name -->
+          <div class="user">
             <b>Owner:</b> {{ place.user.first_name }} {{ place.user.last_name }}
           </div>
+
+          <!-- Describes the place, and renders as safe HTML -->
           <div class="description">
-	    {{ place.description | safe }}
+            {{ place.description | safe }}
           </div>
-	</article>
-	{% endfor %}
+        </article>
+        {% endfor %}
       </section>
     </div>
+
+    <!-- Footer contains the simple message -->
     <footer>
-      <p>Holberton School</p>
+      <p>HBNB</p>
     </footer>
   </body>
 </html>
