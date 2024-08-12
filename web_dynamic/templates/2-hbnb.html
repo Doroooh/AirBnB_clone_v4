@@ -2,80 +2,115 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <!-- Include jQuery library for DOM manipulation and AJAX functionality -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- Link main JavaScript file with dynamic cache ID to prevent caching issues -->
     <script src="../static/scripts/2-hbnb.js?{{ cache_id }}"></script>
+    <!-- Common stylesheet to ensure consistent design across the application -->
     <link rel="stylesheet" type="text/css" href="../static/styles/4-common.css?{{ cache_id }}">
+    <!-- Styles specific to the header for consistent branding -->
     <link rel="stylesheet" type="text/css" href="../static/styles/3-header.css?{{ cache_id }}">
+    <!-- Footer-specific styles for uniformity across pages -->
     <link rel="stylesheet" type="text/css" href="../static/styles/3-footer.css?{{ cache_id }}">
+    <!-- Filter section styles for location and amenities filtering options -->
     <link rel="stylesheet" type="text/css" href="../static/styles/6-filters.css?{{ cache_id }}">
+    <!-- Custom styles for the places section, showcasing available places -->
     <link type="text/css" rel="stylesheet" href="../static/styles/8-places.css?{{ cache_id }}">
+    <!-- Favicon for browser tab to reinforce site branding -->
     <link rel="icon" href="../static/images/icon.png?{{ cache_id }}" />
+    <!-- Page title that appears in the browser's title bar or tab -->
     <title>HBnB</title>
   </head>
   <body>
+    <!-- Header section has logo and API status indicator -->
     <header>
+      <!-- Placeholder for site logo  -->
       <div class="logo"></div>
-	  <div id="api_status" class="available"></div>
+      <!-- Indicator for API status, reflects availability or connectivity -->
+      <div id="api_status" class="available"></div>
     </header>
+
+    <!-- Main -->
     <div class="container">
+      <!-- user refines the search -->
       <section class="filters">
-	<div class="locations">
-	  <h3>States</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for state in states %}
-	      <li>
-		<h2>{{ state[0].name }}:</h2>
-		<ul>
-		  {% for city in state[1] %}
-		  <li>{{ city.name }}</li>
-		  {% endfor %}
-		</ul>
-	      </li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<div class="amenities">
-	  <h3>Amenities</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for amenity in amenities %}
-	      <li><input type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">{{ amenity.name }}</li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<button type="button">Search</button>
+        <!-- allow selection of states and  cities -->
+        <div class="locations">
+          <h3>States</h3>
+          <h4>&nbsp;</h4> <!-- Spacer for alignment -->
+          <div class="popover">
+            <ul>
+              <!-- Looping through the list of states to display them -->
+              {% for state in states %}
+              <li>
+                <!-- Display the state name as a heading -->
+                <h2>{{ state[0].name }}:</h2>
+                <ul>
+                  <!-- Looping through cities associated with the state and displaying them -->
+                  {% for city in state[1] %}
+                  <li>{{ city.name }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Amenity-based filtering, allowing users to select desired amenities -->
+        <div class="amenities">
+          <h3>Amenities</h3>
+          <h4>&nbsp;</h4> <!-- maintains layout consistency -->
+          <div class="popover">
+            <ul>
+              <!-- Loop through the list of amenities and rendering checkboxes for selection -->
+              {% for amenity in amenities %}
+              <li>
+                <!-- Checkbox for selecting an amenity with corresponding data attributes -->
+                <input type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">
+                {{ amenity.name }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Button to initiate search based on selected filters -->
+        <button type="button">Search</button>
       </section>
+
+      <!-- display the list of places matching the selected filters -->
       <div class="placesh1"><h1>Places</h1></div>
       <section class="places">
-	<!-- <h1>Places</h1> -->
-	{% for place in places %}
-	<article>
-	  <div class="title_box">
-	    <h2>{{ place.name }}</h2>
-	    <div class="price_by_night">${{ place.price_by_night }}</div>
-	  </div>
-	  <div class="information">
-	    <div class="max_guest">{{ place.max_guest }} Guest{% if place.max_guest != 1 %}s{% endif %}</div>
+        <!-- Looping through the list of places to render each place's details -->
+        {% for place in places %}
+        <article>
+          <!-- Title box contains the place name and price per night -->
+          <div class="title_box">
+            <h2>{{ place.name }}</h2>
+            <div class="price_by_night">${{ place.price_by_night }}</div>
+          </div>
+          <!-- Information has guest capacity, number of rooms, and bathrooms -->
+          <div class="information">
+            <div class="max_guest">{{ place.max_guest }} Guest{% if place.max_guest != 1 %}s{% endif %}</div>
             <div class="number_rooms">{{ place.number_rooms }} Bedroom{% if place.number_rooms != 1 %}s{% endif %}</div>
             <div class="number_bathrooms">{{ place.number_bathrooms }} Bathroom{% if place.number_bathrooms != 1 %}s{% endif %}</div>
-	  </div>
-	  <div class="user">
+          </div>
+          <!-- name -->
+          <div class="user">
             <b>Owner:</b> {{ place.user.first_name }} {{ place.user.last_name }}
           </div>
+          <!-- rendering place's description -->
           <div class="description">
-	    {{ place.description | safe }}
+            {{ place.description | safe }}
           </div>
-	</article>
-	{% endfor %}
+        </article>
+        {% endfor %}
       </section>
     </div>
+
+    <!-- Footer  -->
     <footer>
-      <p>Holberton School</p>
+      <p>HBNB</p>
     </footer>
   </body>
 </html>
