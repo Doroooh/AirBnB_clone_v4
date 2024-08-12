@@ -1,61 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Define character encoding for the HTML document -->
     <meta charset="UTF-8">
+    <!-- Include jQuery library from a CDN for JavaScript functionality -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- Link to the JavaScript file for HBnB functionalities -->
     <script src="../static/scripts/4-hbnb.js?{{ cache_id }}"></script>
+    <!-- Link to the CSS file for common styles across the site -->
     <link rel="stylesheet" type="text/css" href="../static/styles/4-common.css?{{ cache_id }}">
+    <!-- Link to the CSS file for header-specific styles -->
     <link rel="stylesheet" type="text/css" href="../static/styles/3-header.css?{{ cache_id }}">
+    <!-- Link to the CSS file for footer-specific styles -->
     <link rel="stylesheet" type="text/css" href="../static/styles/3-footer.css?{{ cache_id }}">
+    <!-- Link to the CSS file for styling the filters section -->
     <link rel="stylesheet" type="text/css" href="../static/styles/6-filters.css?{{ cache_id }}">
+    <!-- Link to the CSS file for styling the places section -->
     <link type="text/css" rel="stylesheet" href="../static/styles/8-places.css?{{ cache_id }}">
+    <!-- Set the favicon for the webpage -->
     <link rel="icon" href="../static/images/icon.png?{{ cache_id }}" />
+    <!-- title -->
     <title>HBnB</title>
   </head>
   <body>
+    <!-- Header -->
     <header>
+      <!-- logo image -->
       <div class="logo"></div>
-	  <div id="api_status" class="available"></div>
+      <!-- display the API connection status -->
+      <div id="api_status" class="available"></div>
     </header>
+    
+    <!-- Main -->
     <div class="container">
+      <!-- filters for search -->
       <section class="filters">
-	<div class="locations">
-	  <h3>States</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for state in states %}
-	      <li>
-		<h2>{{ state[0].name }}:</h2>
-		<ul>
-		  {% for city in state[1] %}
-		  <li>{{ city.name }}</li>
-		  {% endfor %}
-		</ul>
-	      </li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<div class="amenities">
-	  <h3>Amenities</h3>
-	  <h4>&nbsp;</h4>
-	  <div class="popover">
-	    <ul>
-	      {% for amenity in amenities %}
-	      <li><input type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">{{ amenity.name }}</li>
-	      {% endfor %}
-	    </ul>
-	  </div>
-	</div>
-	<button type="button">Search</button>
+        <!-- select states and cities -->
+        <div class="locations">
+          <h3>States</h3>
+          <!--  alignment -->
+          <h4>&nbsp;</h4>
+          <!--  dropdown  -->
+          <div class="popover">
+            <ul>
+              <!-- Looping through the states -->
+              {% for state in states %}
+              <li>
+                <!-- Displaying state and cities  -->
+                <h2>{{ state[0].name }}:</h2>
+                <ul>
+                  <!-- Looping through the cities -->
+                  {% for city in state[1] %}
+                  <li>{{ city.name }}</li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <!-- select  amenities -->
+        <div class="amenities">
+          <h3>Amenities</h3>
+          <!-- alignment -->
+          <h4>&nbsp;</h4>
+          <!-- dropdown -->
+          <div class="popover">
+            <ul>
+              <!-- Looping through the amenities -->
+              {% for amenity in amenities %}
+              <li>
+                <!-- Checkbox to select amenities -->
+                <input type="checkbox" data-id="{{ amenity.id }}" data-name="{{ amenity.name }}">
+                {{ amenity.name }}
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <!-- initiate search based on selected filters -->
+        <button type="button">Search</button>
       </section>
-      <div class="placesh1"><h1>Places</h1></div>
+
+      <!-- Header for the places section -->
+      <div class="placesh1">
+        <h1>Places</h1>
+      </div>
+
+      <!-- display list of places -->
       <section class="places">
+        <!-- Content populated with place -->
       </section>
     </div>
+
+    <!-- Footer -->
     <footer>
-      <p>Holberton School</p>
+      <!-- Footer -->
+      <p>HBNB</p>
     </footer>
   </body>
 </html>
